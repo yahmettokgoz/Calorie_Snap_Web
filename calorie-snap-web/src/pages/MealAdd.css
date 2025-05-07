@@ -1,0 +1,99 @@
+/* MealAdd.css */
+
+.meal-container {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .meal-container h2 {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .meal-container input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  
+  .food-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .food-item {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f2f2f2;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .food-item:hover {
+    background-color: #e6e6e6;
+  }
+  
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 24px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  .modal-content h3 {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .modal-content button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #2196f3;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  
+  .modal-content button:hover {
+    background-color: #1976d2;
+  }
+  
+  .modal-content .cancel {
+    background-color: #e53935;
+  }
+  
+  .modal-content .cancel:hover {
+    background-color: #c62828;
+  }
+  

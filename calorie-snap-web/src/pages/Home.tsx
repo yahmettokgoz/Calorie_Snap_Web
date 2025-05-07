@@ -1,12 +1,20 @@
-import React from 'react';
+// src/pages/Home.tsx
+import { useNavigate } from 'react-router-dom';
+import './Home.css';
 
-const Home: React.FC = () => {
+export default function HomePage() {
+  const navigate = useNavigate();
+
   return (
-    <div>
-      <h1>Hoş Geldin!</h1>
-      <p>Burası anasayfa.</p>
+    <div className="home-container">
+      <h2>Hoş geldin, Kullanıcı 👋</h2>
+      <p>Web uygulamasına başarıyla giriş yaptınız!</p>
+
+      <div className="button-group">
+        <button onClick={() => navigate('/meal-add')}>🍽️ Öğün Ekle</button>
+        <button onClick={() => navigate('/progress')}>📊 İlerlemeni Gör</button>
+        <button onClick={() => navigate('/photo-gallery')}>🖼️ Öğün Yükle (Galeri)</button>
+      </div>
     </div>
   );
-};
-
-export default Home;
+}

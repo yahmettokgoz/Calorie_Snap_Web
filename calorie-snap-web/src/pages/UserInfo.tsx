@@ -1,54 +1,72 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../firebaseConfig';
 import './UserInfo.css';
 
 export default function UserInfoPage() {
   const navigate = useNavigate();
-  const [age, setAge] = useState('');
-  const [height, setHeight] = useState('');
-  const [weight, setWeight] = useState('');
+  const [user, setUser] = useState<any>(null);
+  const [isim, setIsim] = useState('');
+  const [soyisim, setSoyisim] = useState('');
   const [gender, setGender] = useState('');
-  const [goal, setGoal] = useState('');
+  const [age, setAge] = useState('');
+  const [weight, setWeight] = useState('');
+  const [height, setHeight] = useState('');
 
-  const handleSubmit = async () => {
-    if (!age || !height || !weight || !gender || !goal) {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) setUser(currentUser);
+      else navigate('/');
+    });
+    return unsubscribe;
+  }, [navigate]);
+
+  const handleContinue = async () => {
+    if (!isim || !soyisim || !gender || !age || !weight || !height) {
       alert('Lütfen tüm alanları doldurun.');
       return;
     }
 
     try {
-      const user = auth.currentUser;
-      if (!user) {
-        alert('Kullanıcı oturumu bulunamadı.');
-        return;
-      }
-
-      const profileRef = doc(db, 'profiles', user.uid);
-      await setDoc(profileRef, {
-        age: Number(age),
-        height: Number(height),
-        weight: Number(weight),
+      await setDoc(doc(db, 'profiles', user.uid), {
+        isim,
+        soyisim,
         gender,
-        goal,
-      }, { merge: true }); // önceki verileri silmesin
-
+        age: Number(age),
+        weight: Number(weight),
+        height: Number(height),
+        email: user.email
+      });
       navigate('/home');
-    } catch (error: any) {
-      alert(`Hata: ${error.message}`);
+    } catch (err) {
+      alert('Hata: Veriler kaydedilemedi.');
+      console.error(err);
     }
   };
 
   return (
-    <div className="userinfo-container">
-      <h2>Profil Bilgileri</h2>
-      <input placeholder="Yaş" value={age} onChange={(e) => setAge(e.target.value)} />
-      <input placeholder="Boy (cm)" value={height} onChange={(e) => setHeight(e.target.value)} />
-      <input placeholder="Kilo (kg)" value={weight} onChange={(e) => setWeight(e.target.value)} />
-      <input placeholder="Cinsiyet" value={gender} onChange={(e) => setGender(e.target.value)} />
-      <input placeholder="Hedefiniz" value={goal} onChange={(e) => setGoal(e.target.value)} />
-      <button onClick={handleSubmit}>Kaydet ve Devam Et</button>
+    <div className="user-info-container">
+      <h2>Kişisel Bilgilerini Gir</h2>
+      <input placeholder="İsim" value={isim} onChange={(e) => setIsim(e.target.value)} />
+      <input placeholder="Soyisim" value={soyisim} onChange={(e) => setSoyisim(e.target.value)} />
+      <input type="number" placeholder="Yaş" value={age} onChange={(e) => setAge(e.target.value)} />
+      <input type="number" placeholder="Kilo (kg)" value={weight} onChange={(e) => setWeight(e.target.value)} />
+      <input type="number" placeholder="Boy (cm)" value={height} onChange={(e) => setHeight(e.target.value)} />
+
+      <div className="gender-buttons">
+        <button
+          className={gender === 'Erkek' ? 'selected' : ''}
+          onClick={() => setGender('Erkek')}>Erkek</button>
+        <button
+          className={gender === 'Kadın' ? 'selected' : ''}
+          onClick={() => setGender('Kadın')}>Kadın</button>
+      </div>
+
+      <button className="continue-button" onClick={handleContinue}>
+        Kaydet ve Devam Et
+      </button>
     </div>
   );
 }
